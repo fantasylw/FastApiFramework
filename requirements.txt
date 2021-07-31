@@ -1,0 +1,8 @@
+mongoengine
+fastapi
+uvicorn
+requests
+jsonpath
+pydantic
+python-jose
+json5
