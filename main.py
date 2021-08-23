@@ -38,4 +38,4 @@ for item in routers.data:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8888, forwarded_allow_ips='*')
+    uvicorn.run(app, host="0.0.0.0", port=8080, forwarded_allow_ips='*')

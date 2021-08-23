@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Header
+from fastapi import Request
+from fastapi import Depends
 from hashlib import md5
 from typing import Any, Union,Optional
 from datetime import datetime, timedelta
@@ -47,6 +49,29 @@ def login(body:ModelLoginBody):
         "owner": str(user.id)
     }
     return ResponseCode.code_200(data)
+
+@router.get("/info", summary="获取用户信息")
+def get_user_info(request: Request, token_data: Union[str, Any] = Depends(check_jwt_token)) -> Any:
+    """ 获取用户信息 :param token_data: :return: """
+    # print(token_data) # 这个状态能响应说明token验证通过
+    client_host = request.client.host
+    if "username" not in token_data:
+        return token_data
+    else:
+        user_id = token_data['id']
+        user =  ModelUser.objects.get(id = user_id)
+        data= {
+                "roles": [
+                    "admin" # TODO 角色跟权限以后再补充
+                ],
+                "description": user.description,
+                "avatar": user.avatar,
+                "name": user.name,
+                "owner": user_id,
+                "username": user.username,
+                "client_host": client_host
+            }
+        return ResponseCode.code_200(data=data)
 
 
 @router.post("/add")
